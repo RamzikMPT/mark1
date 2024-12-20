@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Общие стили для страницы */
+        body {
+            background-color: #3b3e3e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden; /* Убираем прокрутку */
+        }
+
+        .header {
+            background-color: #2b333c;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .table {
+            background-color: #4a4a4a;
+            border-radius: 8px;
+        }
+
+        .table thead th {
+            background-color: #2b333c;
+            color: white;
+        }
+
+        .table tbody tr {
+            background-color: #5a5a5a;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 12px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .alert {
+            background-color: #2b333c;
+            color: #ffffff;
+            border: none;
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 20px;
+            color: #ffffff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для снежинок -->
+<div id="snowflakes"></div>
+
+<div class="header">
+    <h1>Корзина</h1>
+</div>
+
+<div class="container mt-5">
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Корзина пуста.</div>
+    <div th:unless="${cartItems.isEmpty()}">
+        <a href="/userpage" class="btn btn-secondary mb-3">Вернуться на пользовательскую страницу</a>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.product.productName}"></td>
+                <td th:text="${item.product.price}"></td>
+                <td>
+                    <form th:action="@{/cart/update}" method="post">
+                        <input type="hidden" name="cartId" th:value="${item.cartId}" />
+                        <input type="number" name="quantity" th:value="${item.quantity}" min="1" class="form-control" />
+                        <button type="submit" class="btn btn-primary mt-2">Обновить</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/cart/remove}" method="post">
+                        <input type="hidden" name="cartId" th:value="${item.cartId}" />
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Функция для создания снежинок
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.getElementById('snowflakes').appendChild(snowflake);
+
+        // Удаление снежинки после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+
+    // Запускаем генерацию снежинок
+    setInterval(createSnowflake, 300);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание карточек товаров</title>
+    <style>
+        /* Основные стили страницы */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #3b3e3e;
+            margin: 0;
+            padding: 0;
+            color: white;
+            /* Убираем ограничение прокрутки, возвращаем её */
+            overflow-y: auto;
+        }
+
+        /* Хедер страницы */
+        h1 {
+            margin: 20px 0;
+            color: #fff;
+        }
+
+        /* Стиль формы */
+        form {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Поля ввода и метки */
+        label, input, textarea {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input, textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9fafb;
+        }
+
+        /* Кнопка отправки */
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #a54ae2;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357ab7;
+        }
+
+        /* Таблица товаров */
+        table {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        /* Ссылки */
+        a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 20px;
+            color: #ffffff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для снежинок -->
+<div id="snowflakes"></div>
+
+<!-- Заголовок -->
+<h1>Создание карточек товаров</h1>
+
+<!-- Форма создания товара -->
+<form th:action="@{/seller/saveProduct}" th:object="${product}" method="post">
+    <label>Название:</label>
+    <input type="text" th:field="*{productName}" required />
+
+    <label>Цена:</label>
+    <input type="number" th:field="*{price}" required />
+
+    <label>Описание:</label>
+    <textarea th:field="*{description}"></textarea>
+
+    <label>Количество на складе:</label>
+    <input type="number" th:field="*{stock}" required />
+
+    <label>URL изображения:</label>
+    <input type="text" th:field="*{imageUrl}" />
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<!-- Список товаров -->
+<h2>Список товаров</h2>
+<form method="get" action="/seller/cards" style="margin-bottom: 20px;">
+    <label>Поиск (по названию или описанию):
+        <input type="text" name="query" th:value="${query}" placeholder="Введите запрос">
+    </label>
+    <button type="submit">Искать</button>
+</form>
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Описание</th>
+        <th>Количество</th>
+        <th>Изображение</th>
+        <th>Действия</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.productName}"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.description}"></td>
+        <td th:text="${product.stock}"></td>
+        <td><img th:src="${product.imageUrl}" alt="Image" width="100"/></td>
+        <td>
+            <a th:href="@{/seller/edit/{id}(id=${product.productId})}">Редактировать</a> |
+            <a th:href="@{/seller/delete/{id}(id=${product.productId})}">Удалить</a>
+        </td>
+    </tr>
+</table>
+
+<a href="/sellerpage" class="back-link">Вернуться на главную</a>
+
+<script>
+    // Функция для создания снежинок
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.getElementById('snowflakes').appendChild(snowflake);
+
+        // Удаление снежинки после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+
+    // Запускаем генерацию снежинок
+    setInterval(createSnowflake, 300);
+</script>
+
+</body>
+</html>

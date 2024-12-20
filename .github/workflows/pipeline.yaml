@@ -1,0 +1,29 @@
+name: Build and Lint Java Spring Project
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Проверка репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Установка JDK
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Установка зависимостей и запуск линтера с Maven
+      - name: Run Maven Lint (Checkstyle)
+        run: mvn checkstyle:check

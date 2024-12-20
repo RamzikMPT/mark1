@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактировать Курьера</title>
+</head>
+<body>
+<h1>Редактировать Курьера</h1>
+<form th:action="@{/kuri/edit/{id}(id=${courier.courierId})}" method="post">
+    <label>Имя: <input type="text" name="name" th:value="${courier.name}" required></label><br>
+    <label>Телефон: <input type="text" name="phone" th:value="${courier.phone}" required></label><br>
+    <button type="submit">Сохранить изменения</button>
+</form>
+</body>
+</html>

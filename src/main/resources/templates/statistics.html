@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Статистика</title>
+    <style>
+        /* Общие стили для фона и текста */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3b3e3e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            overflow: hidden; /* Убираем прокрутку */
+        }
+
+        /* Стили для заголовков */
+        h2 {
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        /* Основной контейнер */
+        .content {
+            max-width: 800px;
+            width: 100%;
+            padding: 2em;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Стили для списка */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        ul li {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 20px;
+            color: #ffffff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для снежинок -->
+<div id="snowflakes"></div>
+
+<div class="content">
+    <h2>Данные заказов</h2>
+    <ul>
+        <li th:each="entry : ${orderStatusCounts}">
+            Статус: <span th:text="${entry.key}"></span>, Количество: <span th:text="${entry.value}"></span>
+        </li>
+    </ul>
+
+    <h2>Данные товаров</h2>
+    <ul>
+        <li th:each="entry : ${productStockCounts}">
+            Товар: <span th:text="${entry.key}"></span>, Остаток: <span th:text="${entry.value}"></span>
+        </li>
+    </ul>
+</div>
+
+<script>
+    // Функция для создания снежинок
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.getElementById('snowflakes').appendChild(snowflake);
+
+        // Удаление снежинки после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+
+    // Запускаем генерацию снежинок
+    setInterval(createSnowflake, 300);
+</script>
+
+</body>
+</html>

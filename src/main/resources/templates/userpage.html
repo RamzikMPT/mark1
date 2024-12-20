@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользовательская страница</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Общие стили для страницы */
+        body {
+            background-color: #3b3e3e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden; /* Убираем прокрутку */
+        }
+
+        .header {
+            background-color: #2b333c;
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .welcome-message h2 {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            margin: 10px;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 20px;
+            color: #ffffff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для снежинок -->
+<div id="snowflakes"></div>
+
+<div class="header">
+    <h1>Добро пожаловать, пользователь!</h1>
+</div>
+
+<div class="container">
+    <div class="welcome-message">
+        <h2>Выберите действие:</h2>
+    </div>
+    <a href="/user/products" class="btn btn-primary">Посмотреть товары</a>
+    <a href="/cart" class="btn btn-secondary">Корзина</a>
+    <a href="/ord" class="btn btn-success">Заказ</a>
+</div>
+
+<!-- Подключение JS библиотек для Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Функция для создания снежинок
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.getElementById('snowflakes').appendChild(snowflake);
+
+        // Удаление снежинки после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+
+    // Запускаем генерацию снежинок
+    setInterval(createSnowflake, 300);
+</script>
+
+</body>
+</html>

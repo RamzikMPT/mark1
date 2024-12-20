@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактировать Пользователя</title>
+</head>
+<body>
+<h1>Редактировать Пользователя</h1>
+<form th:action="@{/ustables/edit/{id}(id=${user.userId})}" method="post">
+    <label>Имя пользователя: <input type="text" name="username" th:value="${user.username}" required></label><br>
+    <label>Email: <input type="email" name="email" th:value="${user.email}" required></label><br>
+    <label>Роль:
+        <select name="roleId">
+            <option th:each="role : ${roles}" th:value="${role.roleId}" th:text="${role.roleName}" th:selected="${role.roleId == user.role.roleId}"></option>
+        </select>
+    </label><br>
+    <button type="submit">Сохранить изменения</button>
+</form>
+</body>
+</html>

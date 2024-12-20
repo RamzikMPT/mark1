@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Page</title>
+    <style>
+        /* Общие стили для фона и шрифта */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #3b3e3e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden; /* Убираем прокрутку */
+        }
+
+        /* Стили для хедера */
+        header {
+            width: 100%;
+            background-color: #3b3e3e;
+            padding: 1em 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        /* Заголовок на хедере */
+        header h1 {
+            font-size: 24px;
+            margin-left: 20px;
+        }
+
+        /* Стили для навигационных кнопок */
+        .button-container {
+            margin-right: 20px;
+        }
+
+        .button {
+            text-decoration: none;
+            color: white;
+            background-color: #8e4ae2;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Эффект наведения для кнопок */
+        .button:hover {
+            background-color: #357ab7;
+        }
+
+        /* Основной контейнер с контентом */
+        .content {
+            max-width: 800px;
+            width: 100%;
+            padding: 2em;
+            background-color: #fff;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Основной текст */
+        .content p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 20px;
+            color: #ffffff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для снежинок -->
+<div id="snowflakes"></div>
+
+<!-- Хедер с заголовком и кнопками -->
+<header>
+    <h1>Панель Администратора</h1>
+    <div class="button-container">
+        <a href="/kuri" class="button">Управление курьерами</a>
+        <a href="/ustables" class="button">Управление пользователями</a>
+    </div>
+</header>
+
+<!-- Основной контент страницы -->
+<div class="content">
+    <h2>Добро пожаловать, Администратор!</h2>
+    <p>Здесь вы можете управлять пользователями и курьерами.</p>
+</div>
+
+<script>
+    // Функция для создания снежинок
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.getElementById('snowflakes').appendChild(snowflake);
+
+        // Удаление снежинки после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+
+    // Запускаем генерацию снежинок
+    setInterval(createSnowflake, 300);
+</script>
+
+</body>
+</html>
